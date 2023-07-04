@@ -119,3 +119,82 @@ private void swap(int[] nums, int i, int j) {
     nums[j] = temp;
 } 
 }
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+3 MAXIMUM SUBARRAY
+
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int n=nums.length;
+        int sum=0;
+        int max=Integer.MIN_VALUE;
+        for(int i=0;i<n;i++){
+            sum=sum+nums[i];
+            max=Math.max(sum,max);
+            if(sum<0)sum=0;
+        }
+        return max;
+    }
+}
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+4 SORT COLORS
+
+class Solution {
+    public void sortColors(int[] nums) {
+        int count0=0,count1=0,count2=0;
+        for(int i=0;i<nums.length;i++){
+            switch(nums[i]){
+                case 0:
+                    count0++;
+                    break;
+                case 1:
+                    count1++;
+                    break;
+                case 2:
+                    count2++;
+                    break;
+            }
+        }
+        int i=0;
+        while(count0>0){
+            nums[i]=0;
+            i++;
+            count0--;
+        }
+        while(count1>0){
+            nums[i]=1;
+            i++;
+            count1--;
+        }
+        while(count2>0){
+            nums[i]=2;
+            i++;
+            count2--;
+        }
+    }
+}
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+5 BUY AND SELL STOCKS 
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int lsf=Integer.MAX_VALUE;
+        int op=0;
+        int pist=0;
+        for(int i=0;i<prices.length;i++){
+            if(prices[i]<lsf){
+                lsf=prices[i];
+            }
+            pist=prices[i]-lsf;
+            if(pist>op){
+                op=pist;
+            }
+        }
+        return op;
+
+    }
+}
