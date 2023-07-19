@@ -1,0 +1,118 @@
+1.Reverse Linked List
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev=null;
+        ListNode curr=head;
+        while(curr!=null){
+            ListNode nbr=curr.next;
+            curr.next=prev;
+            prev=curr;
+            curr=nbr;
+        }
+        ListNode t=head;
+        head=prev;
+        return head;
+    }
+}
+
+2.Middle of the Linked List
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode f=head;
+        ListNode s=head;
+        while(f!=null && f.next!=null){
+            s=s.next;
+            f=f.next.next;
+        }
+        return s;
+    }
+}
+
+3.Merge Two Sorted Lists
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if(l1==null)return l2;
+        if(l2==null)return l1;
+        //assign l1 to the smaller one and l2 to be the larger one
+        if(l1.val>l2.val){
+            ListNode temp=l1;
+            l1=l2;
+            l2=temp;
+        }
+        ListNode res=l1;
+        while(l1!=null || l2!=null){
+            ListNode tmp=null;
+            while(l1!=null && l1.val<=l2.val){
+                tmp=l1;
+                l1=l1.next;
+            }
+            tmp.next=l2;
+            ListNode temp=l1;
+            l1=l2;
+            l2=temp;
+        }
+        return res;
+
+    }
+}
+
+4.Remove Nth Node From End of List
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode start = new ListNode();
+        start.next = head;
+        ListNode fast = start;
+        ListNode slow = start;     
+
+        for(int i = 1; i <= n; ++i)
+            fast = fast.next;
+    
+        while(fast.next != null)
+        {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        
+        slow.next = slow.next.next;
+        
+        return start.next;
+    }
+}
+5.Add Two Numbers
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode ans=new ListNode(0);
+        ListNode curr=ans;
+        ListNode p=l1,q=l2;
+        int carry=0;
+        while(p!=null || q!=null || carry!=0){
+            int x= (p!=null) ? p.val:0;
+            int y= (q!=null) ? q.val:0; 
+            int sum=x+y+carry;
+            carry=sum/10;
+            curr.next=new ListNode(sum%10);
+            curr=curr.next;
+            if(p!=null){
+                p=p.next;
+            }
+            if(q!=null){
+                q=q.next;
+            }
+        }
+        if(carry>0){
+            curr.next=new ListNode(carry);
+        }
+        return ans.next;
+
+    }
+}
+6.Delete Node in a Linked List
+class Solution {
+    public void deleteNode(ListNode node) {
+        node.val=node.next.val;
+        node.next=node.next.next;
+        
+    }
+}
+
+
