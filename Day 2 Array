@@ -1,0 +1,76 @@
+ARRAYS PART 2
+________________________________________________________________________________________________________
+
+1 Rotate Image/Matrix
+TC->0(N^2)
+SC->O(1)
+class Solution {
+    public static void rotate(int[][] matrix) {
+        //1.transpose
+        for(int i=0;i<matrix.length;i++){
+            for(int j=0;j<i;j++){
+                int temp=matrix[i][j];
+                matrix[i][j]=matrix[j][i];
+                matrix[j][i]=temp;
+            }
+        }
+        //2.reverse every row
+        for(int r=0;r<matrix.length;r++){
+            int left=0;
+            int right=matrix[0].length-1;
+            while(left<right){
+                int temp=matrix[r][left];
+                matrix[r][left]=matrix[r][right];
+                matrix[r][right]=temp;
+                left++;
+                right--;
+            }
+        }
+
+    }
+}
+2) Merge Overlapping Intervals
+class Solution {
+    //TC->0(nlogn)+O(n) because of single iterartion
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals,(a,b)->Integer.compare(a[0],b[0]));//sorted according to the starting
+        ArrayList<int[]> list=new ArrayList<>();
+        for(int[] interval:intervals){
+            if(list.size()==0){
+                list.add(interval);
+            }
+            else{
+                int[] previnterval=list.get(list.size()-1);
+                if(previnterval[1]>=interval[0]){
+                    //merging required
+                    previnterval[1]=Math.max(interval[1],previnterval[1]);
+                }
+                else{
+                    list.add(interval);
+                }
+            }
+        }
+        return list.toArray(new int[list.size()][]);
+    }
+}
+3)Merge sorted arrays
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i=m-1,j=n-1,k=m+n-1;
+        while(j>=0 && i>=0){
+            if(nums1[i]>nums2[j]){
+                nums1[k--]=nums1[i--];
+                
+            }else{
+                nums1[k--]=nums2[j--];
+                
+            }
+        }
+        while(i>=0){
+            nums1[k--]=nums1[i--];
+        }
+        while(j>=0){
+            nums1[k--]=nums2[j--];
+        }
+    }
+}
