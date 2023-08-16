@@ -1,0 +1,159 @@
+
+1 Two sum
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        ArrayList<Integer> arr=new ArrayList<>();
+        int left=0;
+        int right=nums.length;
+        Arrays.sort(nums);
+         while(left<right){
+             if(left!=0 && nums[left]==nums[left-1]){
+                 left++;
+                 continue;
+             }
+            int sum=nums[left]+nums[right];
+            if(sum==target){
+                arr.add(nums[left],nums[right]);
+                left++;
+                right++;
+            }
+            else if(sum>target){
+                right--;
+            }
+            else{
+                left--;
+            }
+        }
+    }
+}
+2 4 sum
+    public class Solution {
+        int len = 0;
+        public List<List<Integer>> fourSum(int[] nums, int target) {
+            len = nums.length;
+            Arrays.sort(nums);
+            return kSum(nums, target, 4, 0);
+        }
+       private ArrayList<List<Integer>> kSum(int[] nums, int target, int k, int index) {
+            ArrayList<List<Integer>> res = new ArrayList<List<Integer>>();
+            if(index >= len) {
+                return res;
+            }
+            if(k == 2) {
+            	int i = index, j = len - 1;
+            	while(i < j) {
+                    //find a pair
+            	    if(target - nums[i] == nums[j]) {
+            	    	List<Integer> temp = new ArrayList<>();
+                    	temp.add(nums[i]);
+                    	temp.add(target-nums[i]);
+                        res.add(temp);
+                        //skip duplication
+                        while(i<j && nums[i]==nums[i+1]) i++;
+                        while(i<j && nums[j-1]==nums[j]) j--;
+                        i++;
+                        j--;
+                    //move left bound
+            	    } else if (target - nums[i] > nums[j]) {
+            	        i++;
+                    //move right bound
+            	    } else {
+            	        j--;
+            	    }
+            	}
+            } else{
+                for (int i = index; i < len - k + 1; i++) {
+                    //use current number to reduce ksum into k-1sum
+                    ArrayList<List<Integer>> temp = kSum(nums, target - nums[i], k-1, i+1);
+                    if(temp != null){
+                        //add previous results
+                        for (List<Integer> t : temp) {
+                            t.add(0, nums[i]);
+                        }
+                        res.addAll(temp);
+                    }
+                    while (i < len-1 && nums[i] == nums[i+1]) {
+                        //skip duplicated numbers
+                        i++;
+                    }
+                }
+            }
+            return res;
+        }
+    }
+3. Longest Consecutive Sequence
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+
+        Arrays.sort(nums);
+
+        int lo = 1;
+        int curr = 1;
+
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] != nums[i-1]) {
+                if (nums[i] == nums[i-1]+1) {
+                    curr += 1;
+                }
+                else {
+                    lo = Math.max(lo, curr);
+                    curr = 1;
+                }
+            }
+        }
+
+        return Math.max(lo, curr);
+    }
+}
+4.Largest subarray with 0 sum
+class GfG
+{
+    int maxLen(int arr[], int n)
+    {
+        // Your code here
+        int preFixSum = 0;
+        
+        int maxSubarrayLength = 0;
+        
+        
+        Map<Integer, Integer> sumFrequency = new HashMap<>();
+        
+        for(int i = 0; i < n; i++) {
+            preFixSum += arr[i];
+            
+            if(preFixSum == 0) {
+                maxSubarrayLength = i + 1;
+                continue;
+            }
+            
+            if(!sumFrequency.containsKey(preFixSum)) {
+                sumFrequency.put(preFixSum, i);
+            } else {
+                maxSubarrayLength = Math.max(maxSubarrayLength, (i - sumFrequency.get(preFixSum)));
+            }
+        }
+        
+        return maxSubarrayLength;
+    }
+}
+5)Longest substring without repeat
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int left = 0;
+        int right = 0;
+        int result = 0;
+        int[] chars = new int[128];
+        while(right < s.length()){
+            char c = s.charAt(right);
+            if(chars[c] > 0) {
+                left = Math.max(left, chars[c]);
+            }
+            result = Math.max(result, right - left + 1);
+            chars[c] = ++right;
+        }
+        return result;
+    }
+}
