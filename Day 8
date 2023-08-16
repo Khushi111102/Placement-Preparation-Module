@@ -1,0 +1,205 @@
+1.N meetings in one room
+class Solution 
+{
+    //Function to find the maximum number of meetings that can
+    //be performed in a meeting room.
+    public static int maxMeetings(int start[], int end[], int n)
+    {
+        // add your code here
+        int m[][] = new int[n][2];
+        for(int i=0;i<n;i++){
+            m[i][0] = start[i];
+            m[i][1] = end[i];
+        }
+        Arrays.sort(m,(a,b) -> a[1] - b[1]);
+        int c = 1;
+        int e = m[0][1];
+        for(int i=1;i<m.length;i++){
+            if(m[i][0] > e){
+                e = m[i][1];
+                c++;
+            }
+        }
+        return c;
+    }
+}
+
+2.Minimum Platforms
+Simple java brute force solution:-
+
+//TC: O(n^2)
+//SC: O(1)
+static int findPlatform(int arr[], int dep[], int n)
+    {
+        // add your code here
+        if(arr.length==1) //condition not compulsary to add
+            return 1;
+        
+        int noPlatforms=0;
+        noPlatforms++;
+        Arrays.sort(arr); // TC: O(nlog(n))
+        Arrays.sort(dep); // TC: O(nlog(n))
+        //i starts from 1 as there is no i-1 to compare
+        // for index 0 of array
+        for(int i=1;i<n;i++) { // TC: O(n^2)
+            int inUse=0; 
+
+           //find no of platforms in use
+            for(int j=i-1;j>=0;j--) { //or j=0;j<=i-1;j++
+                if(dep[j]-arr[i]>=0) 
+                    inUse++;
+            }
+            if(inUse==noPlatforms)
+                noPlatforms++;  //we have to add another        //platform for the newly arrived train to use
+                               
+        }
+        
+        return noPlatforms;
+    }
+3.Job Sequencing Problem
+class Solution
+{
+static int maxDeadline(int deadline[],int n){
+    int max=deadline[0];
+    for(int i=1;i<n;i++){
+        if(max<deadline[i]){
+            max=deadline[i];
+        }
+    }
+    return max;
+}
+static int [] maxProfit(int profit[],int deadline[],int n){
+    int ans[]=new int[2];
+    int maxsize=maxDeadline(deadline,n);
+    int [] job_vector=new int[maxsize+1];
+    for(int i=0;i<=maxsize;i++){
+        job_vector[i]=0;
+    }
+    for(int i=n-1;i>=0;i--){
+        int line=deadline[i];
+        if(job_vector[line]==0){
+            job_vector[line]=profit[i];
+        }
+        else {
+            for(int j=line;j>0;j--){
+                if(job_vector[j]==0){
+                    job_vector[j]=profit[i];
+                    break;
+                }
+            }
+        }
+    }
+    int maxprofit=0;
+    int count=0;
+    for(int i=1;i<=maxsize;i++){
+        if(job_vector[i]!=0){
+             maxprofit+=job_vector[i];
+             count++;
+        }
+    }
+    ans[0]=count;
+    ans[1]=maxprofit;
+    return ans;
+}
+    //Function to find the maximum profit and the number of jobs done.
+    int[] JobScheduling(Job arr[], int n)
+    {
+        Arrays.sort(arr, new Comparator<Job>() {
+
+        @Override
+      public int compare(Job o1, Job o2) {
+        return Integer.compare(o1.profit, o2.profit);
+    }});
+        int [] profit=new int[n];
+        int [] deadline=new int[n];
+        for(int i=0;i<n;i++){
+            profit[i]=arr[i].profit;
+            deadline[i]=arr[i].deadline;
+        }
+        int [] result=maxProfit(profit,deadline,n);
+        return result;
+    }
+}
+4.Fractional Knapsack
+class myCmp implements Comparator<Item>{
+    public int compare(Item a,Item b){
+        return (b.value)*(a.weight)-(b.weight)*(a.value);
+    }
+}
+
+class Solution
+{
+    //Function to get the maximum total value in the knapsack.
+    double fractionalKnapsack(int W, Item arr[], int n) 
+    {
+        // Your code here
+        Arrays.sort(arr,new myCmp());
+        double res=0.0;
+        int curr_cap=W;
+        for(int i=0;i<arr.length;i++){
+            if(arr[i].weight<curr_cap){
+                res+=arr[i].value;
+                curr_cap=curr_cap-arr[i].weight;
+            }
+            else{
+                res=res+arr[i].value*(double)curr_cap/(double)arr[i].weight;
+                break;
+            }
+        }
+        return res;
+        
+        
+    }
+}
+5.Activity Selection
+import java.util.*;
+class meeting {
+    int start;
+    int end;
+    int pos;
+     
+    meeting(int start, int end, int pos)
+    {
+        this.start = start;
+        this.end = end;
+        this.pos = pos;
+    }
+}
+class meetingComparator implements Comparator<meeting>
+{
+    @Override
+    public int compare(meeting o1, meeting o2) 
+    {
+        if (o1.end < o2.end)
+            return -1;
+        else if (o1.end > o2.end)
+            return 1;
+        else if(o1.pos < o2.pos)
+            return -1;
+        return 1; 
+    }
+}
+public class Meeting {
+    static void maxMeetings(int start[], int end[], int n) {
+        ArrayList<meeting> meet = new ArrayList<>();
+        
+        for(int i = 0; i < start.length; i++)
+            meet.add(new meeting(start[i], end[i], i+1));
+        
+        meetingComparator mc = new meetingComparator(); 
+        Collections.sort(meet, mc); 
+        ArrayList<Integer> answer = new ArrayList<>();
+        answer.add(meet.get(0).pos);
+        int limit = meet.get(0).end; 
+        
+        for(int i = 1;i<start.length;i++) {
+            if(meet.get(i).start > limit) {
+                limit = meet.get(i).end; 
+                answer.add(meet.get(i).pos);
+            }
+        }
+        System.out.println("The order in which the meetings will be performed is ");
+        for(int i = 0;i<answer.size(); i++) {
+            System.out.print(answer.get(i) + " ");
+        }
+    }
