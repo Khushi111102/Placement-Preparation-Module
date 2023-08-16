@@ -1,0 +1,138 @@
+1) Subset Sums
+class Solution{
+    public void solve(int idx,int sm,ArrayList<Integer> arr,int n,ArrayList<Integer> ans){
+        if(idx==n){
+            ans.add(sm);
+
+            return;
+        }
+
+        solve(idx+1,sm+arr.get(idx),arr,n,ans);
+        solve(idx+1,sm,arr,n,ans);
+
+    }
+    ArrayList<Integer> subsetSums(ArrayList<Integer> arr, int N){
+        
+        // code here
+        ArrayList<Integer> ans=new ArrayList<>();
+        solve(0,0,arr,N,ans);
+        Collections.sort(ans);
+        return ans;
+        
+    }
+}
+2)Subset 2
+class Solution {
+    List<List<Integer>> output;
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort( nums ); //To handle duplicate first we sort the array ( adjacent elements will be similar )
+        output = new ArrayList();
+        backTracking( 0, nums, new ArrayList() );
+        return output;
+    }
+    
+    public void backTracking( int index, int[] nums, List<Integer> list )
+    {
+        output.add( new ArrayList(list) );
+        for( int i = index;i < nums.length; i++ )
+        {
+            if( i != index && nums[i] == nums[i-1] ) //skip the duplicates, except for the first time
+                continue;
+            list.add( nums[i]); //include
+            backTracking(i+1,nums,list); //explore
+            list.remove( list.size()-1);//backtrack, remove the element
+        }
+    }
+}
+3)Combination sum
+public List<List<Integer>> combinationSum(int[] nums, int target) {
+    List<List<Integer>> list = new ArrayList<>();
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, target, 0);
+    return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, int remain, int start){
+    if(remain < 0) return;
+    else if(remain == 0) list.add(new ArrayList<>(tempList));
+    else{ 
+        for(int i = start; i < nums.length; i++){
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, remain - nums[i], i); // not i + 1 because we can reuse same elements
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+}
+4)combination sum 2
+public List<List<Integer>> combinationSum2(int[] nums, int target) {
+    List<List<Integer>> list = new ArrayList<>();
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, target, 0);
+    return list;
+    
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, int remain, int start){
+    if(remain < 0) return;
+    else if(remain == 0) list.add(new ArrayList<>(tempList));
+    else{
+        for(int i = start; i < nums.length; i++){
+            if(i > start && nums[i] == nums[i-1]) continue; // skip duplicates
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, remain - nums[i], i + 1);
+            tempList.remove(tempList.size() - 1); 
+        }
+    }
+} 
+
+5)Palindrome Partitioning
+public List<List<String>> partition(String s) {
+   List<List<String>> list = new ArrayList<>();
+   backtrack(list, new ArrayList<>(), s, 0);
+   return list;
+}
+
+public void backtrack(List<List<String>> list, List<String> tempList, String s, int start){
+   if(start == s.length())
+      list.add(new ArrayList<>(tempList));
+   else{
+      for(int i = start; i < s.length(); i++){
+         if(isPalindrome(s, start, i)){
+            tempList.add(s.substring(start, i + 1));
+            backtrack(list, tempList, s, i + 1);
+            tempList.remove(tempList.size() - 1);
+         }
+      }
+   }
+}
+public boolean isPalindrome(String s, int low, int high){
+   while(low < high)
+      if(s.charAt(low++) != s.charAt(high--)) return false;
+   return true;
+}
+6)Permutation sequence
+
+class Solution {
+    public String getPermutation(int n, int k) {
+        int fact=1;
+        List<Integer> numbers=new ArrayList<>();
+        for(int i=1;i<n;i++){
+            fact=fact*i;
+            numbers.add(i);//[1,2,3]
+        }
+        numbers.add(n);
+        String ans="";
+        k=k-1;//0 based indexing
+        while(true){
+            ans+=numbers.get(k/fact);
+            numbers.remove(k/fact);
+            if(numbers.size()==0){
+                break;
+            }
+            k=k%fact;
+            fact=fact/numbers.size();
+        }
+        return ans;
+
+    }
+}
